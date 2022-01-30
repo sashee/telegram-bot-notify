@@ -49,3 +49,7 @@ resource "aws_lambda_permission" "with_sns" {
   principal     = "sns.amazonaws.com"
   source_arn    = aws_sns_topic.updates.arn
 }
+
+output "topic_arn" {
+	value = aws_sns_topic.updates.arn
+}

@@ -22,7 +22,11 @@
 ## Use
 
 * Start a chat with your bot
-* Publish a message to the SNS topic
+* Publish a message to the SNS topic:
+
+```
+aws sns publish --topic-arn $(terraform output -raw topic_arn) --message "test"
+```
 
 ## Cleanup
 
