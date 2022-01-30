@@ -5,8 +5,8 @@ resource "aws_lambda_function" "updates-lambda" {
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
   environment {
     variables = {
-      token_parameter = aws_ssm_parameter.bot-token.name
-			subscribers_table = aws_dynamodb_table.subscribers.name,
+      token_parameter   = aws_ssm_parameter.bot-token.name
+      subscribers_table = aws_dynamodb_table.subscribers.name,
     }
   }
 
@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "updates-lambda_exec_role_policy" {
       "dynamodb:Scan",
     ]
     resources = [
-			aws_dynamodb_table.subscribers.arn,
+      aws_dynamodb_table.subscribers.arn,
     ]
   }
 }

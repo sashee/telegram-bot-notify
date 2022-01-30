@@ -1,3 +1,7 @@
+resource "random_id" "start_token" {
+  byte_length = 16
+}
+
 resource "aws_lambda_function" "control-lambda" {
   function_name = "${random_id.id.hex}-control-function"
 
@@ -5,10 +9,11 @@ resource "aws_lambda_function" "control-lambda" {
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
   environment {
     variables = {
-      domain          = aws_apigatewayv2_api.api.api_endpoint
-      path_key        = random_id.random_path.hex
-      token_parameter = aws_ssm_parameter.bot-token.name
-			subscribers_table = aws_dynamodb_table.subscribers.name,
+      domain            = aws_apigatewayv2_api.api.api_endpoint
+      path_key          = random_id.random_path.hex
+      token_parameter   = aws_ssm_parameter.bot-token.name
+      subscribers_table = aws_dynamodb_table.subscribers.name,
+      start_token       = random_id.start_token.hex
     }
   }
 
@@ -49,11 +54,11 @@ data "aws_iam_policy_document" "control-lambda_exec_role_policy" {
   statement {
     actions = [
       "dynamodb:GetItem",
-			"dynamodb:DeleteItem",
-			"dynamodb:PutItem",
+      "dynamodb:DeleteItem",
+      "dynamodb:PutItem",
     ]
     resources = [
-			aws_dynamodb_table.subscribers.arn,
+      aws_dynamodb_table.subscribers.arn,
     ]
   }
 }

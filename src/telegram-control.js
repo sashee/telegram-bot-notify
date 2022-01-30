@@ -46,7 +46,7 @@ export const sendTelegramCommand = async (url, params) => {
 	if (!result.ok) {
 		throw new TelegramError(result.description, res);
 	}
-	return result;
+	return result.result;
 };
 
 export const handler = async (event) => {
@@ -71,9 +71,11 @@ export const handler = async (event) => {
 				},
 			]
 		});
+		const me = await sendTelegramCommand("getMe");
+		return me.username;
 	}else {
 		const client = new DynamoDBClient();
-		const {subscribers_table} = process.env;
+		const {subscribers_table, start_token} = process.env;
 		const stop = async (chat_id) => {
 			await client.send(new DeleteItemCommand({
 				TableName: subscribers_table,
@@ -97,16 +99,20 @@ export const handler = async (event) => {
 		};
 
 		const update = JSON.parse(event.body);
-		console.log(update);
+		console.log(JSON.stringify(update, undefined ,4));
 		if (update.message) {
 			const {message: {chat: {id: chat_id}, text}} = update;
+			const startPattern = /^\/start (?<token>\w+)$/;
 			try {
-				if (text === "/start") {
-					await start(chat_id);
-					await sendTelegramCommand("sendMessage", {
-						chat_id,
-						text: "Subscribed to updates",
-					});
+				if (text.match(startPattern)) {
+					const {token} = text.match(startPattern).groups;
+					if (token === start_token) {
+						await start(chat_id);
+						await sendTelegramCommand("sendMessage", {
+							chat_id,
+							text: "Subscribed to updates",
+						});
+					}
 				}
 				if (text === "/stop") {
 					await stop(chat_id);

@@ -21,7 +21,7 @@
 
 ## Use
 
-* Start a chat with your bot
+* Start a chat with your bot using the link from the terraform output (```https://t.me/<botname>?start=<token>```)
 * Publish a message to the SNS topic:
 
 ```

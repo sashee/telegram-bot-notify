@@ -51,5 +51,9 @@ resource "aws_lambda_permission" "with_sns" {
 }
 
 output "topic_arn" {
-	value = aws_sns_topic.updates.arn
+  value = aws_sns_topic.updates.arn
+}
+
+output "start_link" {
+  value = "https://t.me/${jsondecode(data.aws_lambda_invocation.set_webhook.result)}?start=${random_id.start_token.hex}"
 }
