@@ -100,7 +100,7 @@ export const handler = async (event) => {
 
 		const update = JSON.parse(event.body);
 		console.log(JSON.stringify(update, undefined ,4));
-		if (update.message) {
+		if (update.message && update.message.text) {
 			const {message: {chat: {id: chat_id}, text}} = update;
 			const startPattern = /^\/start (?<token>\w+)$/;
 			try {
