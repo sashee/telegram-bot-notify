@@ -102,7 +102,7 @@ export const handler = async (event) => {
 		console.log(JSON.stringify(update, undefined ,4));
 		if (update.message && update.message.text) {
 			const {message: {chat: {id: chat_id}, text}} = update;
-			const startPattern = /^\/start (?<token>\w+)$/;
+			const startPattern = /^\/start (?<token>\S+)$/;
 			try {
 				if (text.match(startPattern)) {
 					const {token} = text.match(startPattern).groups;

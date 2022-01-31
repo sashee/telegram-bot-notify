@@ -55,5 +55,5 @@ output "topic_arn" {
 }
 
 output "start_link" {
-  value = "https://t.me/${jsondecode(data.aws_lambda_invocation.set_webhook.result)}?start=${random_id.start_token.hex}"
+  value = "https://t.me/${jsondecode(data.aws_lambda_invocation.set_webhook.result)}?start=${random_id.start_token.b64_url}"
 }

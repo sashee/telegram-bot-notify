@@ -13,7 +13,7 @@ resource "aws_lambda_function" "control-lambda" {
       path_key          = random_id.random_path.hex
       token_parameter   = aws_ssm_parameter.bot-token.name
       subscribers_table = aws_dynamodb_table.subscribers.name,
-      start_token       = random_id.start_token.hex
+      start_token       = random_id.start_token.b64_url
     }
   }
 
